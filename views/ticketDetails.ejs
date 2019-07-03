@@ -1,0 +1,43 @@
+<%- include('partials/head'); %>
+<%- include('partials/header'); %>
+<div class="container">
+        <p class="text-center text-danger"></p>
+        <form class="add-player-form" action="" method="post" enctype="multipart/form-data">
+        <form class="ticketDetails" action="/ticketDetails/:ticket_id" method="post" enctype="multipart/form-data">
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="ticket_id">Ticket ID <%= ticket.ticket_id%></label>
+                    <input type="text" class="form-control" name="ticket_id" id="ticket_id" value="<%= ticket.ticket_id%>" required disabled title="Cannot be change">
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="user_id">User Id</label>
+                    <input type="text" class="form-control" name="user_id" id="user_id" value="<%= ticket.user_id %>" required disabled title="Cannot be change">
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="date_created">Date of Submission</label>
+                    <input type="text" class="form-control" name="date_created" id="date_created" value="<%= ticket.date_created %>" required disabled title="Cannot be change">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="status">Status of Ticket</label>
+                    <select id="status" name="status" class="form-control" required>
+                        <option selected><%= ticket.status %></option>
+                        <option id="1">Active</option>
+                        <option id="0">Resolved</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="value">Subject</label>
+                    <input type="text" class="form-control" name="subject" id="subject" value="<%= ticket.subject %>" required>
+                </div>
+                <div class="form-group col-md-4">
+                        <label for="value">Ticket Details</label>
+                        <textarea type="text" rows="3" class="form-control" name="details" id="details" value="<%= ticket.details %>" required></textarea>
+                    </div>
+            </div>
+            <button type="submit" class="btn btn-info">Update Ticket</button>
+        </form>
+    </div>
+</div>
+</div>
+</body>
+</html>

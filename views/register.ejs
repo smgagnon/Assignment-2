@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <%- include('partials/head'); %>
+</head>
+<body>
+    <div class="container login-container">
+        <div class="row">
+            <div class="col-md-6 login-form-1">
+            </div>
+            <div class="col-md-6 login-form-2">
+                <h3>Register</h3>
+                <form class="container" method="POST" action="/login">
+                    <div class="form-group">
+                        <input type="text" name="first_name" class="form-control" placeholder="First Name" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="last_name" class="form-control" placeholder="Last Name" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="email" class="form-control" placeholder="Email Address" />
+                    </div>
+                    <div class="form-group">
+                        <input type="password" name="password" class="form-control" placeholder="Password" />
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" class="btnSubmit" value="Register" />
+                    </div>
+                    <div class="form-group">
+                            <a href="/" class="btn">Already Have An Account? <br>Login Here</a>
+                        </div>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+  </body>
+</html>

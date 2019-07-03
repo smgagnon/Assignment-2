@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <%- include('partials/head'); %>
+  </head>
+  <body>
+
+<!-- Header -->
+<%- include('partials/header'); %>
+<header class="bg-info py-2 mb-2">
+    <div class="container">
+      <h2 class="font-weight-bold text-white text-uppercase">Welcome, <% userX.first_name %> View All Tickets:</h2>
+    </div>
+  </header>
+    <div class="table-wrapper">
+            <table class="table table-hovered">
+                <thead class="thead-light text-dark">
+                    <tr>
+                        <th scope="col">Ticket ID</th>
+                        <th scope="col">User ID</th>
+                        <th scope="col">Status of Ticket</th>
+                        <th scope="col">Subject</th>
+                        <th scope="col">Date of Submission</th>
+                        <th scope="col">Date Updated</th>
+                        <th scope="col">Edit Ticket</th>
+                    </tr>
+            </thead>
+            <tbody>
+                    <%  userX.forEach(function(user){  %>  
+            <tr>
+                <td scope="row"><%=user.ticket_id %></td>
+                <td scope="row"><%= user.user_id %></td>
+                <td scope="row"><%=user.status %></td>
+                <td scope="row"><%=user.subject %></td>
+                <td scope="row"><%=user.date_created %></td>
+                <td scope="row"><%=user.date_updated %></td>
+                <td scope="row"><a href="ticketDetails/<%= user.ticket_id%>" >See Details</a></td>
+            </tr>
+            <% })  %>
+            </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

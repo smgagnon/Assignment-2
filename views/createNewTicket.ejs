@@ -1,0 +1,38 @@
+<%- include('partials/head'); %>
+<%- include('partials/header'); %>
+<div class="container">
+        <p class="text-center text-danger"></p>
+        <form class="create-new-ticket" action="/createNewTicket" method="post">
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="email">User Email</label>
+                    <input type="text" class="form-control" name="email" id="email" value="" required >
+                </div>
+                <div class="form-group col-md-4">
+                        <label for="userId">User ID</label>
+                        <input type="text" class="form-control" name="userId" id="userId" value="" required >
+                    </div>
+                <div class="form-group col-md-6">
+                    <label for="status">Status of Ticket</label>
+                    <select id="status" name="status" class="form-control" required>
+                        <option>Active</option>
+                        <option>Resolved</option>
+                        <option>Cancelled</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="subject">Subject</label>
+                    <input type="text" class="form-control" name="subject" id="subject" value="" required>
+                </div>
+                <div class="form-group col-md-4">
+                        <label for="details">Ticket Details</label>
+                        <textarea type="text" rows="6" class="form-control" name="details" id="details" value="" required></textarea>
+                    </div>
+            </div>
+            <button type="submit" class="btn btn-info">Submit Ticket</button>
+        </form>
+    </div>
+</div>
+</div>
+</body>
+</html>

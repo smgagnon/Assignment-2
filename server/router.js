@@ -32,7 +32,6 @@ router.post('/login', (req, res) => {
         req.session.email = results[0].email;
         req.session.user = results[0];
         res.redirect('/tickets');
-        console.log(results);
     }
     else if(results[0].user_role === 'user'){
         req.session.email = results[0].email;
@@ -57,6 +56,33 @@ router.post('/login', (req, res) => {
     });
     }
 })
+
+
+// User Dashboard
+router.get('/user_dashboard', (req, res) => {
+    let user = req.session.user;
+    let email = req.session.email;
+
+    if(email === null){
+        res.redirect('/', {
+        message: message,
+        pageId: 'login',
+        title: 'Welcome',
+    });
+    }
+    let ticketQuery="SELECT * FROM `tickets` WHERE `email` = '" + email + "'";
+    //let ticketQuery= "SELECT * FROM `tickets` INNER JOIN users ON tickets.user_id = users.user_id WHERE `email` = '" + email + "'";
+    db.query(ticketQuery, (err, results) => {
+        res.render('user_dashboard', {
+        user: user,
+        userX: results,
+        pageId: 'user_dashboard',
+        title: 'User Dashboard',
+        })
+        console.log(results);
+    })
+});
+
 
 // Register Page
 router.get('/register', (req, res) => {

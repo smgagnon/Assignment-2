@@ -6,6 +6,16 @@ const router = express.Router();
 
 // Routes
 
+
+// Register Page
+router.get('/register', (req, res) => {
+    res.render('register', {
+        email  : req.session.email,
+        pageId: 'register',
+        title: 'Register',
+    })
+});
+
 // Login Page
 router.get('/', (req, res) => {
     let message = '';
@@ -57,7 +67,6 @@ router.post('/login', (req, res) => {
     }
 })
 
-
 // User Dashboard
 router.get('/user_dashboard', (req, res) => {
     let user = req.session.user;
@@ -83,15 +92,71 @@ router.get('/user_dashboard', (req, res) => {
     })
 });
 
+router.post('/user_dashboard', (req, res, next) => {
+    let user = req.session.user;
+    let post = req.body;
+    let email = post.email;
+    let getUserTickets = "SELECT * FROM `tickets` WHERE `email` = '" + email + "'";
+//console.log(email);
+console.log(post);
+//console.log(post.userId);
+    db.query(getUserTickets, (err, results) => {
+        if (err) {
+            return res.status(500).send(err);
+        } else {
+        res.render('user_dashboard', {
+            email: email,
+            pageId: 'user_dashboard',
+            title: 'User Dashboard',
+            userX: results,
+        })
+    }  
+})
+})
 
-// Register Page
-router.get('/register', (req, res) => {
-    res.render('register', {
-        email  : req.session.email,
-        pageId: 'register',
-        title: 'Register',
+// All Tickets Page
+
+router.get('/tickets', (req, res) => {
+    let user = req.session.user;
+    let email = req.session.email;
+
+    if(email === null){
+        res.redirect('/', {
+        message: message,
+        pageId: 'login',
+        title: 'Welcome',
+        });
+    }
+    let getAllTickets = "SELECT * FROM tickets ORDER BY status ASC, date_created ASC";
+    db.query(getAllTickets, (err, results) => {
+        res.render('tickets', {
+        user: user,
+        userX: results,
+        pageId: 'tickets',
+        title: 'All Tickets',
+        })
+        console.log(results);
     })
 });
+
+router.post('/tickets', (req, res, next) => {
+    let user = req.session.user;
+    let post = req.body;
+    let email = post.email;
+    db.query(getAllTickets, (err, results) => {
+        if (err) {
+            return res.status(500).send(err);
+        } else {
+        res.render('tickets', {
+            email: email,
+            pageId: 'tickets',
+            title: 'All Tickets',
+            userX: results,
+        })
+    }  
+})
+})
+
 
 // Create a new ticket
 router.get('/createnewticket', (req, res) => {
@@ -118,21 +183,13 @@ db.query(createTicket, (err, result) => {
     })
 });
 
-router.post('/tickets', (req, res) => {
 
-});
 
-// router.get('/ticketDetails', (req, res,) => {
-//     res.render('ticketDetails', {
-//         pageId: 'ticketDetails',
-//         title: 'Ticket Details',
-//     });
-// });
 // Ticket Details
 router.get('/ticketDetails/:ticket_id', (req, res) => {
     
     let ticket_id = req.params.ticket_id;
-    let getTicketQuery = "SELECT ticket_id, email, date_created, status, subject, details FROM `tickets` WHERE `ticket_id` = '" + ticket_id + "'";
+    let getTicketQuery = "SELECT ticket_id, user_id, email, date_created, status, subject, details FROM `tickets` WHERE `ticket_id` = '" + ticket_id + "'";
     db.query(getTicketQuery, (err, result) => {
         if (err) {
             return res.status(500).send(err);
@@ -141,7 +198,7 @@ router.get('/ticketDetails/:ticket_id', (req, res) => {
                 email  : req.session.email,
                 pageId: 'ticketDetails',
                 title: 'Ticket Details',
-                'ticket': result,
+                'ticket': result[0],
         })
     console.log(result);
     }
@@ -165,36 +222,11 @@ db.query(updateTicketDetails, (err, result) => {
     })
 });
 
-// All Tickets Page
-router.get('/tickets', (req, res) => {
-    res.render('tickets', {
-        email  : req.session.email,
-        pageId: 'tickets',
-        title: 'Tickets',
-    })
-});
 
-router.post('/user_dashboard', (req, res, next) => {
-    let user = req.session.user;
-    let post = req.body;
-    let email = post.email;
-    let getUserTickets = "SELECT * FROM `tickets` WHERE `email` = '" + email + "'";
-//console.log(email);
-console.log(post);
-//console.log(post.userId);
-    db.query(getUserTickets, (err, results) => {
-        if (err) {
-            return res.status(500).send(err);
-        } else {
-        res.render('user_dashboard', {
-            email: email,
-            pageId: 'user_dashboard',
-            title: 'User Dashboard',
-            userX: results,
-        })
-    }  
-})
-})
+
+
+
+//////// NOTES IGNORE ////////
 
 
 // User Dashboard

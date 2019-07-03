@@ -22,10 +22,27 @@
                         <th scope="col">Status of Ticket</th>
                         <th scope="col">Subject</th>
                         <th scope="col">Ticket Details</th>
-                        <th scope="col">Update Ticket</th>
                         <th scope="col">Respond to Ticket</th>
                     </tr>
                 </thead>
+                <tbody>
+                        <%  userX.forEach(function(user){  %>  
+                <tr>
+                    <td scope="row"><%=user.ticket_id %></td>
+                    <td scope="row"><%= user.user_id %></td>
+                    <td scope="row"><%=user.date_created %></td>
+                    <% if(user.status === 'active'){   %>  
+                        <td scope="row" class="text-success"><%=user.status %></td>
+                    <% } %>
+                    <% if(user.status === 'resolved'){   %>  
+                        <td scope="row" class="text-secondary"><%=user.status %></td>
+                      <% } %>
+                    <td scope="row"><%=user.subject %></td>
+                    <td scope="row"><%=user.details %></td>
+                    <td scope="row"><a href="ticketDetails/<%= user.ticket_id%>" >Reply to Ticket</a></td>
+                </tr>
+            <% }) %>
+            </tbody>
             </table>
         </div>
     </div>

@@ -6,7 +6,7 @@
   <body>
 
 <!-- Header -->
-<%- include('partials/header'); %>
+<%- include('partials/header_admin'); %>
 <header class="bg-info py-2 mb-2">
     <div class="container">
       <h2 class="font-weight-bold text-white text-uppercase">Tickets</h2>
@@ -26,15 +26,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                        <%  userX.forEach(function(user){  %>  
+                    <%  userX.forEach(function(user){  %>  
                 <tr>
                     <td scope="row"><%=user.ticket_id %></td>
                     <td scope="row"><%= user.user_id %></td>
                     <td scope="row"><%=user.date_created %></td>
-                    <% if(user.status === 'active'){   %>  
+                    <% if(user.status === 'Active'){   %>  
                         <td scope="row" class="text-success"><%=user.status %></td>
                     <% } %>
-                    <% if(user.status === 'resolved'){   %>  
+                    <% if(user.status === 'Resolved'){   %>  
                         <td scope="row" class="text-secondary"><%=user.status %></td>
                       <% } %>
                     <td scope="row"><%=user.subject %></td>

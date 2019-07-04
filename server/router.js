@@ -6,7 +6,6 @@ const router = express.Router();
 
 // Routes
 
-
 // Register Page
 router.get('/register', (req, res) => {
     res.render('register', {
@@ -15,6 +14,23 @@ router.get('/register', (req, res) => {
         title: 'Register',
     })
 });
+
+router.post('/register', (req, res, next) => {
+    let email = req.body.email;
+    let password = req.body.password;
+    let first_name = req.body.first_name;
+    let last_name = req.body.last_name;
+    let registerQuery = "INSERT INTO `users` (user_id, email, password, first_name, last_name) VALUES (NULL, '" + email + "', '" + password + "', '" + first_name + "',  '" + last_name + "')";
+    //'INSERT INTO users(email, password, first_name, last_name) VALUES(?, ?, ?, ?)';
+    db.query(registerQuery, (err, results) => {
+        if (err) {
+            return res.status(500).send(err);
+        } else {
+        res.redirect('/',)
+    } 
+})
+});
+
 
 // Login Page
 router.get('/', (req, res) => {
@@ -40,12 +56,10 @@ router.post('/login', (req, res) => {
         db.query(loginQuery, (err, results) => {
     if(results.user_role === 'emp'){
         req.session.email = results[0].email;
-        req.session.user = results[0];
         res.redirect('/tickets');
     }
     else if(results[0].user_role === 'user'){
         req.session.email = results[0].email;
-        req.session.user = results[0];
         res.redirect('/user_dashboard');
     }
     else {
@@ -71,7 +85,6 @@ router.post('/login', (req, res) => {
 router.get('/user_dashboard', (req, res) => {
     let user = req.session.user;
     let email = req.session.email;
-
     if(email === null){
         res.redirect('/', {
         message: message,
@@ -79,7 +92,7 @@ router.get('/user_dashboard', (req, res) => {
         title: 'Welcome',
     });
     }
-    let ticketQuery="SELECT * FROM `tickets` WHERE `email` = '" + email + "'";
+    let ticketQuery="SELECT * FROM `tickets` WHERE `email` = '" + email + "' ORDER BY status ASC, date_created ASC";
     //let ticketQuery= "SELECT * FROM `tickets` INNER JOIN users ON tickets.user_id = users.user_id WHERE `email` = '" + email + "'";
     db.query(ticketQuery, (err, results) => {
         res.render('user_dashboard', {
@@ -93,7 +106,6 @@ router.get('/user_dashboard', (req, res) => {
 });
 
 router.post('/user_dashboard', (req, res, next) => {
-    let user = req.session.user;
     let post = req.body;
     let email = post.email;
     let getUserTickets = "SELECT * FROM `tickets` WHERE `email` = '" + email + "'";
@@ -160,20 +172,32 @@ router.post('/tickets', (req, res, next) => {
 
 // Create a new ticket
 router.get('/createnewticket', (req, res) => {
+    let email = req.session.email;
+    let createTicket = "SELECT * FROM `tickets` WHERE `email` = '" + email + "'";
+    db.query(createTicket, (err, result) => {
+        if (err) {
+            return res.status(500).send(err);
+    } else {
     res.render('createNewTicket', {
-        email  : req.session.email,
+        email  : email,
+        user : req.session,
         pageId: 'createNewTicket',
         title: 'Create New Ticket',
+        ticket: result,
     })
+}
+console.log(result);
+})
 });
 
 router.post('/createnewticket',  (req, res) => {
-    let email = req.body.email;
+    let email = req.session.email;
+    let emails = req.body.email;
     let userId = req.body.userId;
     let status = req.body.status;
     let subject = req.body.subject;
     let details = req.body.details;
-    let createTicket = "INSERT INTO `tickets` (ticket_id, user_id, status, subject, date_created, details, email) VALUES (NULL, '" + userId + "', '" + status + "', '" + subject + "', CURRENT_TIMESTAMP(), '" + details + "', '" + email + "')";
+    let createTicket = "INSERT INTO `tickets` (ticket_id, user_id, status, subject, date_created, details, email) VALUES (NULL, '" + userId + "', '" + status + "', '" + subject + "', CURRENT_TIMESTAMP(), '" + details + "', '" + emails + "')";
 db.query(createTicket, (err, result) => {
     if (err) {
         return res.status(500).send(err);
@@ -184,12 +208,10 @@ db.query(createTicket, (err, result) => {
 });
 
 
-
 // Ticket Details
 router.get('/ticketDetails/:ticket_id', (req, res) => {
-    
     let ticket_id = req.params.ticket_id;
-    let getTicketQuery = "SELECT ticket_id, user_id, email, date_created, status, subject, details FROM `tickets` WHERE `ticket_id` = '" + ticket_id + "'";
+    let getTicketQuery = "SELECT * FROM `tickets` WHERE `ticket_id` = '" + ticket_id + "'";
     db.query(getTicketQuery, (err, result) => {
         if (err) {
             return res.status(500).send(err);
@@ -198,7 +220,7 @@ router.get('/ticketDetails/:ticket_id', (req, res) => {
                 email  : req.session.email,
                 pageId: 'ticketDetails',
                 title: 'Ticket Details',
-                'ticket': result[0],
+                ticket: result[0],
         })
     console.log(result);
     }
@@ -207,21 +229,58 @@ router.get('/ticketDetails/:ticket_id', (req, res) => {
 
 router.post('/ticketDetails/:ticket_id',  (req, res) => {
     let ticket_id = req.params.ticket_id;
-    let user_id = req.body.user_id;
+    let reply = req.body.reply;
     let status = req.body.status;
-    let subject = req.body.subject;
-    let details = req.body.details;
-    let updateTicketDetails = "UPDATE `tickets` SET `ticket_id` = '" + ticket_id + "', `user_id` = '" + user_id + "', `status` = '" + status + "', `subject` = '" + subject + "', `details` = '" + details + "', ";
+    let updateTicketDetails = "UPDATE tickets SET `status` = '" + status + "', `reply` = '" + reply + "' WHERE ticket_id = '" + ticket_id + "'";
+console.log(reply);
+    //let updateTicketDetails = "UPDATE `tickets` SET `ticket_id` = '" + ticket_id + "', `user_id` = '" + user_id + "', `status` = '" + status + "', `subject` = '" + subject + "', `details` = '" + details + "', ";
     //let updateTicketDetails = "INSERT INTO `tickets` (ticket_id, user_id, status, subject, details, date_updated, date_created) VALUES ('" + ticket_id + "', " + user_id + "', " + status + "'," + subject + "', " + details + "', CURRENT_TIMESTAMP(), null";
 db.query(updateTicketDetails, (err, result) => {
     if (err) {
         return res.status(500).send(err);
     } else {
-        res.redirect('/user_dashboard/:ticket_id');
+        res.redirect('/tickets');
         }
     })
 });
 
+
+// Update Ticket - for user
+
+router.get('/updateTicket/:ticket_id', (req, res) => {
+    let ticket_id = req.params.ticket_id;
+    let getTicketQuery = "SELECT * FROM `tickets` WHERE `ticket_id` = '" + ticket_id + "'";
+    db.query(getTicketQuery, (err, result) => {
+        if (err) {
+            return res.status(500).send(err);
+    } else {
+            res.render('updateTicket', {
+                email  : req.session.email,
+                pageId: 'updateTicket',
+                title: 'Update Ticket Details',
+                ticket: result[0],
+        })
+    console.log(result);
+    }
+    })
+});
+
+router.post('/updateTicket/:ticket_id',  (req, res) => {
+    let ticket_id = req.body.ticket_id;
+    let subject = req.body.subject;
+    let details = req.body.details;
+    let status = req.body.status;
+    let updateTicketDetails = "UPDATE tickets SET `subject` = '" + subject + "', `details` = '" + details + "',`status` = '" + status + "', WHERE ticket_id = '" + ticket_id + "'";
+    //let updateTicketDetails = "UPDATE `tickets` SET `ticket_id` = '" + ticket_id + "', `user_id` = '" + user_id + "', `status` = '" + status + "', `subject` = '" + subject + "', `details` = '" + details + "', ";
+    //let updateTicketDetails = "INSERT INTO `tickets` (ticket_id, user_id, status, subject, details, date_updated, date_created) VALUES ('" + ticket_id + "', " + user_id + "', " + status + "'," + subject + "', " + details + "', CURRENT_TIMESTAMP(), null";
+db.query(updateTicketDetails, (err, result) => {
+    if (err) {
+        return res.status(500).send(err);
+    } else {
+        res.redirect('/tickets');
+        }
+    })
+});
 
 
 

@@ -6,7 +6,7 @@
   <body>
 
 <!-- Header -->
-<%- include('partials/header'); %>
+<%- include('partials/header_user'); %>
 <header class="bg-info py-2 mb-2">
     <div class="container">
       <h2 class="font-weight-bold text-white text-uppercase">Welcome, <% userX.user_id %> View All Tickets:</h2>
@@ -30,11 +30,16 @@
             <tr>
                 <td scope="row"><%=user.ticket_id %></td>
                 <td scope="row"><%= user.user_id %></td>
-                <td scope="row"><%=user.status %></td>
+                <% if(user.status === 'Active'){   %>  
+                    <td scope="row" class="text-success"><%=user.status %></td>
+                <% } %>
+                <% if(user.status === 'Resolved'){   %>  
+                    <td scope="row" class="text-secondary"><%=user.status %></td>
+                  <% } %>
                 <td scope="row"><%=user.subject %></td>
                 <td scope="row"><%=user.date_created %></td>
                 <td scope="row"><%=user.date_updated %></td>
-                <td scope="row"><a href="ticketDetails/<%= user.ticket_id%>" >See Details</a></td>
+                <td scope="row"><a href="updateTicket/<%= user.ticket_id%>" >See Details</a></td>
             </tr>
             <% })  %>
             </tbody>

@@ -19,11 +19,11 @@
                 </div>
                 <div class="form-group col-lg-10">
                     <label for="value">Subject</label>
-                    <input type="text" class="form-control" name="subject" id="subject" value="<%= ticket.subject %>" required disabled title="Cannot be changed">
+                    <input type="text" class="form-control" name="subject" id="subject" value="<%= ticket.subject %>" required>
                 </div>
                 <div class="form-group col-lg-10">
                         <label for="value">Ticket Details</label>
-                        <textarea type="text" rows="3" class="form-control" name="details" id="details" value="" disabled title="Cannot be changed"><%= ticket.details %></textarea>
+                        <textarea type="text" rows="3" class="form-control" name="details" id="details" value="" required><%= ticket.details %></textarea>
                     </div>
             <div class="form-group col-md-4">
                     <label for="status">Status of Ticket</label>
@@ -32,10 +32,6 @@
                         <option id="1">Active</option>
                         <option id="0">Resolved</option>
                     </select>
-                </div>
-            <div class="form-group col-lg-10">
-                    <label for="reply">Admin Reply:</label>
-                    <textarea type="text" rows="3" class="form-control" name="reply" id="reply" value="" required></textarea>
                 </div>
         </div>
         <button type="submit" class="btn btn-info">Update Ticket</button>

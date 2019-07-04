@@ -11,6 +11,9 @@ Question 2. Design a customer support/support ticketing website. The website sho
 4) View Open Tickets page – Where customers can view existing tickets opened by them and the ticket status. The list should be sorted by latest tickets.
 5) View Ticket Details page – Where customer can view ticket details and reply to the existing ticket.
 
+Database:
+- I created the original ticketing database with the commands located in the database folder titled tickets.sql. Throughout the journey of creating this website I made a lot of edits to the database through workbench. The updated final export of the database from workbench is in the file titled: tickets_update.sql. 
+
 Please clone file and NPM install and start to see website.
 
 I came across many issues when creating this website. Some of which I have not figured out yet. I have outlined below what I am working on and would like to fix for future iterations of this website and a list of future improvements that I would like to figure out how to implement to improve the quality of the website. Although I struggled with creating this website, I learned more in this one class about web development then I have in my last 3 classes combined. 

@@ -1,17 +1,17 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <%- include('partials/head'); %>
-  </head>
-  <body>
+    <head>
+        <%- include('partials/head'); %>
+    </head>
+<body>
 
 <!-- Header -->
 <%- include('partials/header_user'); %>
 <header class="bg-info py-2 mb-2">
     <div class="container">
-      <h2 class="font-weight-bold text-white text-uppercase">Welcome, <% userX.user_id %> View All Tickets:</h2>
+        <h2 class="font-weight-bold text-white text-uppercase">Welcome, <% userX.user_id %> View All Tickets:</h2>
     </div>
-  </header>
+</header>
     <div class="table-wrapper">
             <table class="table table-hovered">
                 <thead class="thead-light text-dark">
@@ -35,7 +35,7 @@
                 <% } %>
                 <% if(user.status === 'Resolved'){   %>  
                     <td scope="row" class="text-secondary"><%=user.status %></td>
-                  <% } %>
+                <% } %>
                 <td scope="row"><%=user.subject %></td>
                 <td scope="row"><%=user.date_created %></td>
                 <td scope="row"><%=user.date_updated %></td>
